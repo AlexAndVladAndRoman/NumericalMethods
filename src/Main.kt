@@ -6,5 +6,7 @@ fun main(args: Array<String>) {
                     doubleArrayOf(1.0, 2.0, 3.0)
             )
     )
+    val ans = doubleArrayOf(1.0, 2.0, 3.0)
     println(matrix.cond)
+    println(solveGaussian(matrix, ans))
 }
