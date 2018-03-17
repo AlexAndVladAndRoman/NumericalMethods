@@ -1,5 +1,5 @@
 
-fun solveJacobi(a0: Matrix, b: Matrix, x0: Matrix, e: Double): Matrix {
+fun solveJacobi(a0: Matrix, b: DoubleArray, x0: Matrix, e: Double): Matrix {
     val n = a0.size
     val r = a0.copy()
     for (i in 0 until n) {
@@ -17,7 +17,7 @@ fun solveJacobi(a0: Matrix, b: Matrix, x0: Matrix, e: Double): Matrix {
                 if (i != j)
                     s += a0[i, j] * result[j, 0]
             }
-            nResult[i, 0] = (b[i, 0] - s) / a0[i, i]
+            nResult[i, 0] = (b[i] - s) / a0[i, i]
         }
         val cond = result.subtract(nResult).norm
         if (cond / (1 - q) < e) break

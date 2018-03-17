@@ -10,7 +10,7 @@ fun scalarTimes(a : Matrix, matrix: Matrix): Double {
             }
 }
 
-fun getSolve(a0: Matrix, b0: Matrix, x0: Matrix, epsilon: Double): Matrix {
+fun solveConjugateGradient(a0: Matrix, b0: Matrix, x0: Matrix, epsilon: Double): Matrix {
     if (a0.determinant() < 0 || a0 != a0.transpose()) throw Exception("Doesn't satisfy condition")
 
     var xkm = x0

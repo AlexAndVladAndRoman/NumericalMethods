@@ -1,3 +1,4 @@
+
 fun solveGaussian(a0: Matrix, b0: DoubleArray): Matrix {
     if (a0.determinant() == 0.0) throw Exception()
     val a = a0.copy()

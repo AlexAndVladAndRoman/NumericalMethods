@@ -1,5 +1,5 @@
 
-fun solveSeidel(a0: Matrix, b0: Matrix, x0 : Matrix, eps : Double): Matrix {
+fun solveSeidel(a0: Matrix, b0: DoubleArray, x0 : Matrix, eps : Double): Matrix {
     val n = a0.size
     val l = a0.copy()
     val e = Matrix(n, n)
@@ -23,7 +23,7 @@ fun solveSeidel(a0: Matrix, b0: Matrix, x0 : Matrix, eps : Double): Matrix {
             for (j in i + 1 until n) {
                 s += a0[i, j] * result[j, 0]
             }
-            nResult[i, 0] = (b0[i, 0] - s) / a0[i, i]
+            nResult[i, 0] = (b0[i] - s) / a0[i, i]
         }
         val cond = result.subtract(nResult).norm
         if (cond < eps) break
