@@ -10,21 +10,23 @@ fun scalarTimes(a : Matrix, matrix: Matrix): Double {
             }
 }
 
-fun solveConjugateGradient(a0: Matrix, b0: Matrix, x0: Matrix, epsilon: Double): Matrix {
-    if (a0.determinant() < 0 || a0 != a0.transpose()) throw Exception("Doesn't satisfy condition")
+fun solveConjugateGradient(a0: Matrix, b1: DoubleArray, x0: Matrix, epsilon: Double): Matrix {
+    val b0 = Matrix(Array(b1.size) {DoubleArray(1) {0.0}})
+    b1.forEachIndexed {index, d -> b0[index, 0] = d }
+    if (a0.determinant() < 0 || a0 != a0.transpose()) throw NoSolveException("Doesn't satisfy condition")
 
     var xkm = x0
-    var rkm = b0.subtract(a0.multiply(x0))
+    var rkm = b0 - a0 * x0
     var pkm = rkm
 
     var k = 0
     while (true) {
         k++
-        val ak = scalarTimes(rkm, rkm) / scalarTimes(a0.multiply(pkm), pkm)
-        val xk = xkm.add(pkm.scalarMultiply(ak))
-        val rk = rkm.subtract(a0.multiply(pkm.scalarMultiply(ak)))
+        val ak = scalarTimes(rkm, rkm) / scalarTimes(a0 * pkm, pkm)
+        val xk = xkm + pkm * ak
+        val rk = rkm - a0 * pkm * ak
         val bk = scalarTimes(rk, rk) / scalarTimes(rkm, rkm)
-        val pk = rk.add(pkm.scalarMultiply(bk))
+        val pk = rk + pkm * bk
 
         xkm = xk
         rkm = rk
@@ -34,6 +36,6 @@ fun solveConjugateGradient(a0: Matrix, b0: Matrix, x0: Matrix, epsilon: Double):
         if (d < epsilon)
             break
     }
-
+    //println(xkm)
     return xkm
 }

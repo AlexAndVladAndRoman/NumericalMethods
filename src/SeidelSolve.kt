@@ -9,11 +9,20 @@ fun solveSeidel(a0: Matrix, b0: DoubleArray, x0 : Matrix, eps : Double): Matrix 
         }
         e[i, i] = 1.0
     }
-    val r = a0.subtract(l)
-    val q = e.subtract(l).invert().multiply(r).norm
+    val r = a0 - l
+   // println((e - l).determinant())
+    if((e - l).determinant() != 0.0) {
+     /*   println("***********")
+        println(e)
+        println(r)
+        println(l)
+        println((e - (l)).invert() * r)*/
+        val q = ((e - l).invert() * r).norm
+      //  println(q)
+        if (q > 1) throw NoSolveException("q > 1")
+    }
     var result = x0
     var nResult = Matrix(n, 1)
-    if (q > 1) throw Exception()
     while (true) {
         for (i in 0 until n) {
             var s = 0.0
@@ -25,7 +34,7 @@ fun solveSeidel(a0: Matrix, b0: DoubleArray, x0 : Matrix, eps : Double): Matrix 
             }
             nResult[i, 0] = (b0[i] - s) / a0[i, i]
         }
-        val cond = result.subtract(nResult).norm
+        val cond = (result - nResult).norm
         if (cond < eps) break
         result = nResult
         nResult = Matrix(n, 1)

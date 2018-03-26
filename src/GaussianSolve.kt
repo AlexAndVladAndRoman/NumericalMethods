@@ -1,6 +1,6 @@
 
 fun solveGaussian(a0: Matrix, b0: DoubleArray): Matrix {
-    if (a0.determinant() == 0.0) throw Exception()
+    if (a0.determinant() == 0.0) throw NoSolveException("det = 0")
     val a = a0.copy()
     val b = b0.copyOf()
     val n = a.size
@@ -23,6 +23,7 @@ fun solveGaussian(a0: Matrix, b0: DoubleArray): Matrix {
         sum += b[step]
         result[step, 0] = sum / a[step, step]
     }
+  //  println(result)
     return result
 }
 

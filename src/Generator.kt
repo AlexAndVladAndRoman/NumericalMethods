@@ -1,5 +1,8 @@
+import java.util.*
 
-fun rand() = (Math.random() * 100).toInt()
+val random = Random(100)
+
+fun rand() = (random.nextDouble() * 100).toInt()
 
 fun generateSymmetric(size: Int): Matrix {
     while (true) {

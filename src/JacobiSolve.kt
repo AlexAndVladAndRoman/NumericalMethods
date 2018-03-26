@@ -5,11 +5,11 @@ fun solveJacobi(a0: Matrix, b: DoubleArray, x0: Matrix, e: Double): Matrix {
     for (i in 0 until n) {
         r[i, i] = 0.0
     }
-    val d = a0.subtract(r)
-    val q = d.invert().multiply(r).norm
+    val d = a0 - r
+    val q = (d.invert() * r).norm
     var result = x0
     var nResult = Matrix(n, 1)
-    if (q > 1) throw Exception()
+    if (q > 1) throw NoSolveException("q > 1")
     while (true) {
         for (i in 0 until n) {
             var s = 0.0
@@ -19,7 +19,7 @@ fun solveJacobi(a0: Matrix, b: DoubleArray, x0: Matrix, e: Double): Matrix {
             }
             nResult[i, 0] = (b[i] - s) / a0[i, i]
         }
-        val cond = result.subtract(nResult).norm
+        val cond = (result - nResult).norm
         if (cond / (1 - q) < e) break
         result = nResult
         nResult = Matrix(n, 1)

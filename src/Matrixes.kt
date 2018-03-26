@@ -1,5 +1,6 @@
 import org.apache.commons.math3.linear.BlockRealMatrix
 import org.apache.commons.math3.linear.MatrixUtils
+import org.apache.commons.math3.linear.RealMatrix
 
 typealias Matrix = BlockRealMatrix
 
@@ -23,3 +24,12 @@ fun Matrix.determinant(): Double {
     }.sum()
 }
 
+operator fun Matrix.plus(other: RealMatrix) = this.add(other)!!
+operator fun Matrix.minus(other: RealMatrix) = this.subtract(other)!!
+operator fun Matrix.times(other: RealMatrix) = this.multiply(other)!!
+
+operator fun Matrix.times(other: Double) = this.scalarMultiply(other)!!
+
+fun Matrix.show(): String = data.map(DoubleArray::contentToString).fold("") {l, r -> l + '\n' + r}
+
+class NoSolveException(override val message: String? = null) : Exception(message)

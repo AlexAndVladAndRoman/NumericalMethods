@@ -1,18 +1,19 @@
-
 private fun solve(s: String, f: () -> Matrix) {
     try {
         print("$s: ")
         printResult(f())
-    } catch (e: Exception) {
+    } catch (e: NoSolveException) {
         println(s + e.toString())
     }
 }
 
+val e = 1e-6
+
 private fun solveAll(a: Matrix, b: Matrix, c: Matrix) {
     solve("G") { solveGaussian(a, b.getColumn(0)) }
-//    solve("J") { JacobiSolver.getSolve(a, b, c) }
-//    solve("S") { SeidelSolver.getSolve(a, b, c) }
-    solve("C") { solveConjugateGradient(a, b, c, 1e-6) }
+    solve("J") { solveJacobi(a, b.getColumn(0), c, e) }
+    solve("S") { solveSeidel(a, b.getColumn(0), c, e) }
+    solve("C") { solveConjugateGradient(a, b.getColumn(0), c, e) }
 }
 
 //private fun getMatrix(file: String): Matrix = MatrixReader.getDoubleMatrix(File("res/double/$file.txt"))
@@ -27,36 +28,38 @@ private fun printResult(matrix: Matrix) {
 fun main(args: Array<String>) {
     val matrix = Matrix(
             arrayOf(
-                    doubleArrayOf(1.0, 0.0, 0.0),
-                    doubleArrayOf(1.0, 2.0, 0.0),
-                    doubleArrayOf(1.0, 2.0, 3.0)
+                    doubleArrayOf(2.0, 1.0),
+                    doubleArrayOf(1.0, 7.0)
             )
     )
-    val ans = doubleArrayOf(1.0, 2.0, 3.0)
-    println(matrix.cond)
-    println(solveGaussian(matrix, ans))
-    val n = 3
+    println(matrix.show())
+  //  val ans = doubleArrayOf(1.0, 2.0, 3.0)
+    println("matrix cond : ${matrix.cond}")
+   // println(solveGaussian(matrix, ans).show())
+    val n = 10
     double(n)
 }
 
 fun double(n: Int) {
     val b = generateRandom(n, 1)
     val c = generateRandom(n, 1)
-    println("B matrix of size $b")
-    println("C matrix of size $c")
-//    val sym = Generator.generateSymmetric(n)
-//    println("Symmetric matrix of size $sym")
-//    solveAll(sym, b, c)
-//    (0 until n).forEach { sym.set(it, it, 1e-6) }
-//    println("Bad symmetric matrix of size $sym")
-//    solveAll(sym, b, c)
-//    val diag = Generator.generateDiagonallyDominant(n)
-//    println("Diagonally Dominant matrix of size $diag")
-//    solveAll(diag, b, c)
-//    val random = Generator.generateRandom(n, n)
-//    println("Random matrix of size $random")
-//    solveAll(random, b, c)
+    println("B matrix ${b.show()}")
+    println("C matrix ${c.show()}")
+    val sym = generateSymmetric(n)
+    println("Symmetric matrix ${sym.show()}")
+    solveAll(sym, b, c)
+    (0 until n).forEach { sym.set(it, it, 1e-6) }
+    println(sym.cond)
+    println("Bad symmetric matrix ${sym.show()}")
+    solveAll(sym, b, c)
+    val diag = generateDiagonallyDominant(n)
+    println("Diagonally Dominant matrix ${diag.show()}")
+    solveAll(diag, b, c)
+    val random = generateRandom(n, n)
+    println("Random matrix ${random.show()}")
+    solveAll(random, b, c)
     val bad = generateBad(n)
-    println("Bad matrix of size $bad")
+    println(bad.cond)
+    println("Bad matrix ${bad.show()}")
     solveAll(bad, b, c)
 }
